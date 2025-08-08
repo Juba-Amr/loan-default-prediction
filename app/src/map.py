@@ -15,5 +15,7 @@ def data_mapping(data):
     data = (data.dropna(subset=['risk_score'])
             .drop(labels='loan_status', axis=1)
             )
+    
+    data = data.copy()
     print("===> data_mapping called")
     return data

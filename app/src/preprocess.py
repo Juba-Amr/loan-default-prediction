@@ -19,8 +19,13 @@ class BeforePipeline:
         return coef_dict
 
     def num_data_prep(self, data):
+        """
+        #removed this algorithm because it used to take out some columns that were signal so features cleaning will be done manually
+
 
         num_cols = [col for col in data.columns if data[col].dtype != 'object']
+        data[num_cols] = data[num_cols].replace([np.inf, -np.inf], np.nan) #we clear infinites
+
         mat = data[num_cols].corr()
 
         coef_dict= self.filter_matrix(mat)
@@ -29,10 +34,13 @@ class BeforePipeline:
             if a not in temp_set:
                 temp_set.add(a)
                 data = data.drop(labels=a, axis=1)
-        
+        """     
+
         cols_over_30pct_nan = data.columns[data.isna().mean() > 0.3].tolist()
         data = data.drop(labels=cols_over_30pct_nan, axis=1)
-        data = data.dropna(axis=0)
+
+        num_cols = [col for col in data.columns if data[col].dtype != 'object']
+        data[num_cols] = data[num_cols].fillna(data[num_cols].median())
 
         print("===> num_data_prep called")
         return data
@@ -41,8 +49,7 @@ class BeforePipeline:
         print(f'number of cols to drop: {len(cols_to_drop)}')
         print(f'data shape before dropping: {data.shape}')
 
-        data = data.drop(labels=cols_to_drop, axis=1, errors='ignore')
-        data = data.dropna()
+        data = data.drop(labels=cols_to_drop, axis=1)
         
         print(f'{len(cols_to_drop)} columns dropped successfuly')
         print(f'data shape after dropping: {data.shape}')
@@ -50,23 +57,25 @@ class BeforePipeline:
         print("===> drop_useless called")
         return data
 
-    def fico_mean(self, df):
-        df['fico_mean'] = (df['last_fico_range_low'] + df['last_fico_range_high'])/2
-        df = df.drop(columns=['last_fico_range_low','last_fico_range_high'])
+    def clean_infinite_and_nan(self, df):
+        num_cols = [col for col in df.columns if df[col].dtype != 'object']
 
-        print("===> fico_mean called")
+        df[num_cols] = df[num_cols].replace([np.inf, -np.inf], np.nan)
+        df[num_cols] = df[num_cols].fillna(df[num_cols].median()) 
+        print("===> clean infinites called")
         return df
-    
+        
     def all_before_pipeline(self, data):
+        data = self.clean_infinite_and_nan(data)
+
         data = data_mapping(data)
         
         data = self.num_data_prep(data)
         
         data = self.drop_useless(data)
         
-        data = self.fico_mean(data)
+        data = self.clean_infinite_and_nan(data)
         
-
         return data
 
 class PreprocessorCustomFunctions:
@@ -79,7 +88,7 @@ class PreprocessorCustomFunctions:
             categoric_data[col + '_freq'] = categoric_data[col].map(freq_encoding)
 
         categoric_data.drop(columns=['purpose', 'addr_state'], inplace=True)
-        print(f'frequency data encoded successfuly')
+        #print(f'frequency data encoded successfuly')
         return categoric_data
     
     def earliest_to_date(self, categoric_data):
@@ -100,7 +109,7 @@ class PreprocessorCustomFunctions:
         categoric_data = pd.DataFrame(categoric_data).drop(columns=['earliest_cr_line'], axis=1)
 
         #print(f"Remaining rows: {len(categoric_data)}, earliest cr data encoded successfuly")
-        print("earliest cr data encoded successfuly")
+        #print("earliest cr data encoded successfuly")
         return categoric_data
     
     def emp_lenght_map(self, categoric_data):
@@ -111,6 +120,6 @@ class PreprocessorCustomFunctions:
         }
         categoric_data['length'] = categoric_data['emp_length'].map(map_emp_lenght)
         categoric_data = categoric_data.drop(labels='emp_length',axis=1)
-        print('employement lenght encoded successfuly')
+        #print('employement lenght encoded successfuly')
         return categoric_data
 

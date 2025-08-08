@@ -6,6 +6,8 @@ from sklearn.compose import ColumnTransformer, make_column_selector
 
 
 custom_preprocessor = PreprocessorCustomFunctions()
+
+
 def pipeline(model, ver=True):
     preprocessor = ColumnTransformer([
 
@@ -13,7 +15,7 @@ def pipeline(model, ver=True):
         ('frequency_cols', FunctionTransformer(custom_preprocessor.freq_encoding), freq_cols),
         ('employement_lenght', FunctionTransformer(custom_preprocessor.emp_lenght_map), ['emp_length']),
         ('account_age', FunctionTransformer(custom_preprocessor.earliest_to_date), ['earliest_cr_line']),
-        ('cat_left', OneHotEncoder(), ohe_cols)
+        ('OHE', OneHotEncoder(), ohe_cols)
         
     ], verbose=ver)
 
