@@ -1,7 +1,8 @@
-ohe_cols = ['term','debt_settlement_flag','initial_list_status','verification_status','home_ownership']
+ohe_cols = ['term','initial_list_status','verification_status','home_ownership']
 freq_cols = ['purpose','addr_state']
 
 """
+old version of columns to drop
 cols_to_drop=['sub_grade','issue_d','url','emp_title','settlement_date','verification_status_joint',
                 'sec_app_earliest_cr_line','zip_code','pymnt_plan','application_type','disbursement_method',
                 'debt_settlement_flag_date','settlement_status','hardship_start_date','hardship_end_date',
@@ -20,19 +21,19 @@ cols_to_drop = [
     'application_type', 'disbursement_method',
 
     # Dates after loan issuance (leakage)
-    'issue_d', 'settlement_date', 'debt_settlement_flag_date',
-    'hardship_start_date', 'hardship_end_date', 'payment_plan_start_date',
+    'issue_d',
     'next_pymnt_d', 'last_pymnt_d', 'last_credit_pull_d',
 
     # Outcome variables or directly derived from outcome (leakage)
     'out_prncp', 'total_pymnt', 'last_pymnt_amnt', 'total_rec_int',
     'total_rec_late_fee', 'recoveries', 'total_rec_prncp',
-    'out_prncp_inv ', 'collection_recovery_fee', 'total_pymnt_inv ',
+    'out_prncp_inv', 'collection_recovery_fee', 'total_pymnt_inv',
 
     # Flags/status that reflect post-loan events (leakage)
     'settlement_status', 'hardship_type', 'hardship_loan_status',
-    'hardship_flag', 'hardship_status', 'hardship_reason',
+    'hardship_flag', 'hardship_status', 'hardship_reason','settlement_amount',
 
+    
     # Variables giving away default/payment info
     'chargeoff_within_12_mths', 'delinq_amnt', 'acc_now_delinq',
 

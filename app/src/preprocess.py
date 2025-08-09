@@ -44,16 +44,35 @@ class BeforePipeline:
 
         print("===> num_data_prep called")
         return data
-
+    """
     def drop_useless(self, data):
         print(f'number of cols to drop: {len(cols_to_drop)}')
         print(f'data shape before dropping: {data.shape}')
 
-        data = data.drop(labels=cols_to_drop, axis=1)
+        data = data.drop(labels=cols_to_drop, axis=1, errors='ignore')
         
         print(f'{len(cols_to_drop)} columns dropped successfuly')
         print(f'data shape after dropping: {data.shape}')
 
+        print("===> drop_useless called")
+        return data
+    """
+
+    def drop_useless(self, data):
+        print(f'number of cols to drop: {len(cols_to_drop)}')
+        print(f'data shape before dropping: {data.shape}')
+        
+        # Check which columns are actually in data
+        cols_in_data = [col for col in cols_to_drop if col in data.columns]
+        cols_not_in_data = [col for col in cols_to_drop if col not in data.columns]
+        
+        print(f'Columns to drop present in data: {len(cols_in_data)}')
+        print(f'Columns NOT found in data (cannot drop): {cols_not_in_data}')
+        
+        data = data.drop(labels=cols_in_data, axis=1, errors='ignore')
+        
+        print(f'{len(cols_in_data)} columns dropped successfully')
+        print(f'data shape after dropping: {data.shape}')
         print("===> drop_useless called")
         return data
 
