@@ -3,18 +3,23 @@ freq_cols = ['purpose','addr_state']
 
 features_to_keep = [
     # Basic loan characteristics
-    'loan_amnt', 'funded_amnt', 'term', 'int_rate', 'installment', 
+    'loan_amnt', 'funded_amnt', 'term','installment', 
     'grade', 'sub_grade', 'purpose',
     
     # Borrower demographics & employment
     'emp_length', 'home_ownership', 'annual_inc', 'verification_status',
     'zip_code', 'addr_state',
+
+    # Taken at origination
+    'mo_sin_old_rev_tl_op', 'mo_sin_rcnt_rev_tl_op', 'mo_sin_rcnt_tl',
+    'mths_since_recent_bc', 'mths_since_recent_bc_dlq', 'mths_since_recent_inq',
+    'mths_since_recent_revol_delinq',
     
     # Financial health indicators
     'dti', 'annual_inc', 'revol_bal', 'revol_util',
     
     # Credit history (core features)
-    'fico_range_low', 'fico_range_high', 'earliest_cr_line',
+    'earliest_cr_line',
     'delinq_2yrs', 'inq_last_6mths', 'open_acc', 'pub_rec', 'total_acc',
     'mths_since_last_delinq', 'mths_since_last_record',
     
@@ -39,12 +44,12 @@ features_to_keep = [
 ]
 
 # Features to DROP - Data leakage, post-origination, or low value
-cols_to_drop = [
+features_to_drop = [
     # Identifiers (no predictive value)
     'member_id', 'url', 'policy_code',
     
     # Target variable and related (data leakage)
-    'loan_status', 'pymnt_plan',
+    'pymnt_plan','int_rate'
     
     # Post-loan information (data leakage - not available at prediction time)
     'funded_amnt_inv', 'out_prncp', 'out_prncp_inv', 'total_pymnt',
@@ -53,21 +58,17 @@ cols_to_drop = [
     'next_pymnt_d', 'last_credit_pull_d', 'last_fico_range_high', 'last_fico_range_low',
     
     # Post-origination events (data leakage)
+    'fico_range_low', 'fico_range_high',
     'collections_12_mths_ex_med', 'mths_since_last_major_derog',
     'chargeoff_within_12_mths', 'delinq_amnt', 'mo_sin_old_il_acct',
-    'mo_sin_old_rev_tl_op', 'mo_sin_rcnt_rev_tl_op', 'mo_sin_rcnt_tl',
-    'mths_since_recent_bc', 'mths_since_recent_bc_dlq', 'mths_since_recent_inq',
-    'mths_since_recent_revol_delinq', 'num_tl_120dpd_2m', 'num_tl_30dpd',
+    'num_tl_120dpd_2m', 'num_tl_30dpd',
     'num_tl_90g_dpd_24m', 'num_tl_op_past_12m',
     
     # Dates (better to engineer features from these)
-    'issue_d'
+    'issue_d',
     
     # Employment title (too granular, high cardinality)
     'emp_title',
-    
-    # Initial list status (internal LendingClub feature)
-    'initial_list_status',
     
     # Secondary applicant info (sparse, only for joint applications)
     'sec_app_fico_range_low', 'sec_app_fico_range_high', 'sec_app_earliest_cr_line',
@@ -90,5 +91,3 @@ cols_to_drop = [
     # Disbursement method (operational, not predictive)
     'disbursement_method'
 ]
-
-print(len(cols_to_drop))

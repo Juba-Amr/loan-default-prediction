@@ -85,7 +85,6 @@ class BeforePipeline:
         return df
         
     def all_before_pipeline(self, data):
-        data = self.clean_infinite_and_nan(data)
 
         data = data_mapping(data)
         
