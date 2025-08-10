@@ -3,19 +3,17 @@ def data_mapping(data):
         'Fully Paid': 0,
         'Current': 0,
         'In Grace Period': 1,
-        'Late (16-30 days)': 2,
-        'Late (31-120 days)': 3,
-        'Does not meet the credit policy. Status:Fully Paid': 0,
-        'Does not meet the credit policy. Status:Charged Off': 4,
-        'Charged Off': 4,
-        'Default': 5
+        'Late (16-30 days)': 1,
+        'Late (31-120 days)': 1,
+        'Does not meet the credit policy. Status:Fully Paid': None,
+        'Does not meet the credit policy. Status:Charged Off': None,
+        'Charged Off': 1,
+        'Default': 1
     }
 
-    data['risk_score']= data['loan_status'].map(mapping)
-    data = (data.dropna(subset=['risk_score'])
-            .drop(labels='loan_status', axis=1)
-            )
-    
-    data = data.copy()
+    data['loan_status']= data['loan_status'].map(mapping)
+    data = data.dropna(subset=['loan_status'])
+            
     print("===> data_mapping called")
     return data
+    

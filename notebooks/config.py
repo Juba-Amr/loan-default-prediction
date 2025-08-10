@@ -1,10 +1,21 @@
 ohe_cols = ['term','initial_list_status','verification_status','home_ownership']
 freq_cols = ['purpose','addr_state']
 
+cols_to_keep = ['term', 'emp_length', 'home_ownership', 'annual_inc', 'verification_status',
+                'loan_status', 'pymnt_plan', 'purpose', 'zip_code', 'addr_state', 'dti',
+                'delinq_2yrs', 'earliest_cr_line', 'inq_last_6mths', 'revol_bal', 'initial_list_status',
+                'application_type', 'acc_now_delinq', 'tot_coll_amt', 'bc_open_to_buy', 'mo_sin_rcnt_rev_tl_op', 
+                'mo_sin_rcnt_tl', 'mort_acc', 'mths_since_recent_bc', 'mths_since_recent_inq', 'num_accts_ever_120_pd', 
+                'num_il_tl', 'total_il_high_credit_limit', 'installment', 'grade', 'acc_open_past_24mths', 'avg_cur_bal', 
+                'mo_sin_old_rev_tl_op', 'num_actv_rev_tl', 'percent_bc_gt_75', 'pub_rec_bankruptcies', 'tax_liens', 'pub_rec', 
+                'revol_util', 'tot_cur_bal', 'num_bc_sats', 'num_bc_tl'
+]
+
+
 features_to_keep = [
     # Basic loan characteristics
-    'loan_amnt', 'funded_amnt', 'term','installment', 
-    'grade', 'sub_grade', 'purpose',
+    'loan_status','loan_amnt', 'funded_amnt', 'term','installment', 
+    'grade', 'sub_grade', 'purpose','pymnt_plan','int_rate',
     
     # Borrower demographics & employment
     'emp_length', 'home_ownership', 'annual_inc', 'verification_status',
@@ -49,7 +60,7 @@ features_to_drop = [
     'member_id', 'url', 'policy_code',
     
     # Target variable and related (data leakage)
-    'pymnt_plan','int_rate'
+    
     
     # Post-loan information (data leakage - not available at prediction time)
     'funded_amnt_inv', 'out_prncp', 'out_prncp_inv', 'total_pymnt',

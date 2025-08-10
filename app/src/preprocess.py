@@ -6,8 +6,11 @@ from src.map import data_mapping
 class BeforePipeline:
     def __init__(self):
         pass
-
+    
     def filter_matrix(self, corr_matrix):
+        """
+        An algorithm to filter columns by correlation with other columns (not used anymore)
+        """
         coef_dict = {}
         #we'll get correlated columns in a dict 
         for i,col1 in enumerate(corr_matrix.columns):
@@ -17,6 +20,8 @@ class BeforePipeline:
                     if np.abs(correlation) >= 0.9:
                         coef_dict[(col1,col2)] = correlation
         return coef_dict
+    
+
 
     def num_data_prep(self, data):
         """
@@ -39,12 +44,13 @@ class BeforePipeline:
         cols_over_30pct_nan = data.columns[data.isna().mean() > 0.3].tolist()
         data = data.drop(labels=cols_over_30pct_nan, axis=1)
 
-        num_cols = [col for col in data.columns if data[col].dtype != 'object']
-        data[num_cols] = data[num_cols].fillna(data[num_cols].median())
+        data = data.dropna()
 
         print("===> num_data_prep called")
         return data
-    """
+    '''
+    Also removed this part after testing; we directly use the `cols_to_keep` variable we made in data exploration
+
     def drop_useless(self, data):
         print(f'number of cols to drop: {len(cols_to_drop)}')
         print(f'data shape before dropping: {data.shape}')
@@ -56,25 +62,7 @@ class BeforePipeline:
 
         print("===> drop_useless called")
         return data
-    """
-
-    def drop_useless(self, data):
-        print(f'number of cols to drop: {len(cols_to_drop)}')
-        print(f'data shape before dropping: {data.shape}')
-        
-        # Check which columns are actually in data
-        cols_in_data = [col for col in cols_to_drop if col in data.columns]
-        cols_not_in_data = [col for col in cols_to_drop if col not in data.columns]
-        
-        print(f'Columns to drop present in data: {len(cols_in_data)}')
-        print(f'Columns NOT found in data (cannot drop): {cols_not_in_data}')
-        
-        data = data.drop(labels=cols_in_data, axis=1, errors='ignore')
-        
-        print(f'{len(cols_in_data)} columns dropped successfully')
-        print(f'data shape after dropping: {data.shape}')
-        print("===> drop_useless called")
-        return data
+    '''
 
     def clean_infinite_and_nan(self, df):
         num_cols = [col for col in df.columns if df[col].dtype != 'object']
@@ -84,13 +72,13 @@ class BeforePipeline:
         print("===> clean infinites called")
         return df
         
-    def all_before_pipeline(self, data):
+    def all_before_pipeline(self, data: pd.DataFrame):
 
         data = data_mapping(data)
         
         data = self.num_data_prep(data)
         
-        data = self.drop_useless(data)
+        #data = self.drop_useless(data)
         
         data = self.clean_infinite_and_nan(data)
         
@@ -132,7 +120,7 @@ class PreprocessorCustomFunctions:
     
     def emp_lenght_map(self, categoric_data):
         map_emp_lenght = {
-            None: -1,'< 1 year': 0,'1 year':1,'2 years':2,'3 years':3,
+            None: 0,'< 1 year': 0.5,'1 year':1,'2 years':2,'3 years':3,
             '4 years':4,'5 years':5,'6 years':6,'7 years':7,'8 years':8,
             '9 years':9,'10+ years':10
         }
