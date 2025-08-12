@@ -1,9 +1,20 @@
-ohe_cols = ['term', 'home_ownership', 'verification_status', 'pymnt_plan', 'zip_code',
+ohe_cols = ['term', 'home_ownership', 'verification_status', 'pymnt_plan',
             'initial_list_status', 'application_type', 'grade']
 freq_cols = ['purpose','addr_state']
 
-cols_to_keep = ['term', 'emp_length', 'home_ownership', 'annual_inc', 'verification_status',
-                'loan_status', 'pymnt_plan', 'purpose', 'zip_code', 'addr_state', 'dti',
+vars_final = ['delinq_2yrs',
+ 'last_fico_range_high',
+ 'last_fico_range_low',
+ 'acc_now_delinq',
+ 'open_acc_6m',
+ 'total_bal_il',
+ 'il_util',
+ 'open_rv_12m',
+ 'all_util',
+ 'loan_status']
+
+cols_to_keep = ['term', 'emp_length', 'home_ownership', 'annual_inc', 'verification_status','fico_range_low',
+                'loan_status', 'pymnt_plan', 'purpose', 'addr_state', 'dti','int_rate', 'fico_range_high',
                 'delinq_2yrs', 'earliest_cr_line', 'inq_last_6mths', 'revol_bal', 'initial_list_status',
                 'application_type', 'acc_now_delinq', 'tot_coll_amt', 'bc_open_to_buy', 'mo_sin_rcnt_rev_tl_op', 
                 'mo_sin_rcnt_tl', 'mort_acc', 'mths_since_recent_bc', 'mths_since_recent_inq', 'num_accts_ever_120_pd', 
