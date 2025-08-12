@@ -1,4 +1,4 @@
-# EXECUTIVE_SUMMARY_EN.md
+# EXECUTIVE SUMMARY
 Loan Default / Risk Scoring — Executive Summary
 
 Project goal
